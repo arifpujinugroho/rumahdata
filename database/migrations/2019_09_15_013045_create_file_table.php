@@ -17,6 +17,7 @@ class CreateFileTable extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('id_kk');
             $table->string('jns_file')->nullable();
+            $table->string('pemilik')->nullable();
             $table->string('nama_file')->nullable();
             $table->string('tipe_file')->nullable();
             $table->timestamps();

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use Hash;
-use redirect;
+use Redirect;
 use App\User;
 
 class AuthController extends Controller

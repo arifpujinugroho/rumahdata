@@ -9,6 +9,7 @@ use App\Model\AllFile;
 use App\Model\JnsFile;
 use Auth;
 use redirect;
+use Crypt;
 
 class AdminPostController extends Controller
 {
@@ -41,10 +42,10 @@ class AdminPostController extends Controller
         if ($cek) {
             $id_kk = Crypt::decrypt($request->get('kode'));
             $kk = new Keluarga();
-            $kk->id_kk              = $request->get('id_kk');
+            $kk->id_kk              = $id_kk;
             $kk->nik_keluarga       = $request->get('nik_keluarga');
             $kk->nama_keluarga      = $request->get('nama_keluarga');
-            $kk->status_keluarga    = $request->get('status_kelarga');
+            $kk->status_keluarga    = $request->get('status_keluapemilikrga');
             $kk->jns_kel            = $request->get('jns_kel');
             $kk->tempatlahir        = $request->get('tempatlahir');
             $kk->tanggallahir       = $request->get('tanggallahir');
@@ -63,6 +64,26 @@ class AdminPostController extends Controller
     public function AddFile(Request $request)
     {
         $id_kk = Crypt::decrypt($request->get('kode'));
+        $jenisfile = $request->get('jns_file');
+        $pemilik = $request->get('pemilik');
+        $file = $request->file('file');
+        $extensi = $file->getClientOriginalExtension();
+        $pin = mt_rand(00, 999);
+        $nama_file = $id_kk.'-'.$pemilik.'-'.$jenisfile.'-'.$pin.'.'.$extensi;
+        $destinasi = storage_path().'/files/';
+    
+        if (!File::isDirectory($destinasi)) {
+            File::makeDirectory($destinasi, 0775, true);
+        }
+        $file->move($destinasi, $nama_file);
         
+        $f = new AllFile();
+        $f->id_kk = $id_kk;
+        $f->jns_file = $jenisfile;
+        $f->nama_file = $nama_file;
+        $f->tipe_file = $request->get('tipe');
+        $f->save();
+
+        return redirect()->back()->with('file','success');
     }
 }

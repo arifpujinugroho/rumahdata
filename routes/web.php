@@ -14,6 +14,12 @@
 //Route::get('/', function () {
 //    return view('welcome');
 //});
+Route::get('/logout', function()    
+{                     
+    Auth::logout();
+    return Redirect::to('/')
+    ->with('login', 'logout');
+})->name('logout');
 
 Route::get('/', 'AuthController@Index');
 Route::post('/login', 'AuthController@Login');

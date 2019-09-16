@@ -9,6 +9,7 @@ use App\Model\AllFile;
 use App\Model\JnsFile;
 use Auth;
 use redirect;
+use Crypt;
 
 class AdminGetController extends Controller
 {
@@ -22,16 +23,18 @@ class AdminGetController extends Controller
     {
         $allkk = KK::all();
         
-        view('admin.allkk', compact('allkk'));
+        return view('admin.allkk', compact('allkk'));
     }
     public function KK($id)
     {
+
         $kk = KK::whereid($id)->first();
 
         $file = AllFile::whereid_kk($id)->get();
         $keluarga = Keluarga::whereid_kk($id)->get();
+        $jmlkeluarga = Keluarga::whereid_kk($id)->count();
         $jns_file = JnsFile::all();
 
-        return view('admin.kk', compact('kk','file','keluarga','jns_file'));
+        return view('admin.kk', compact('kk','file','keluarga','jns_file','jmlkeluarga'));
     }
 }
